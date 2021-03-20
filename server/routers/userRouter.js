@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const User = require('../models/userModel');
 
-router.post('/', (req, res) => {
+router.post('/', async, (req, res) => {
   try {
     // Destructure the incoming request data
     const { email, password, password2 } = req.body;
@@ -27,7 +27,8 @@ router.post('/', (req, res) => {
         .json({ errorMessage: 'Please ensure your passwords match.' });
     }
     // Check to see if the email address entered already exists
-    const existingUser = User.findOne({ email });
+    const existingUser = await User.findOne({ email });
+
   } catch (err) {
     console.error(err);
     res.status(500).send();
