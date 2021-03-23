@@ -3,6 +3,9 @@ const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+/**
+ * REGISTER USER & SIGN THEM IN (if not already existing)
+ */
 router.post('/', async (req, res) => {
   try {
     // Destructure the incoming request data
@@ -14,7 +17,7 @@ router.post('/', async (req, res) => {
       // return error 400 and error message which can be returned to the front-end
       return res
         .status(400)
-        .json({ errorMessage: 'Please fill out the required fields.' });
+        .json({ errorMessage: 'Please fill all required fields.' });
     // Ensure password meets length requirement
     if (password.length < 6) {
       return res.status(400).json({
@@ -74,6 +77,53 @@ router.post('/', async (req, res) => {
     console.error(err);
     res.status(500).send();
   }
+});
+
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Validate the fields
+    if (!email || !password) {
+      res
+        .status(400)
+        .json({ errorMessage: 'Please fill all required fields.' });
+    }
+
+    const existingUser = await User.findOne({ email });
+
+    if (!existingUser) {
+      return res.status(401).json({ errorMessage: 'Wrong email or password' });
+    }
+
+    const passwordCorrect = await bcrypt.compare(
+      password,
+      existingUser.passwordHash
+    );
+    if (!passwordCorrect) {
+      res.status(401).json({ errorMessage: 'Wrong email or password!' });
+    }
+
+    const token = jwt.sign({ user: existingUser._id }, process.env.JWT_SECRET);
+
+    res
+      .cookie('token', token, {
+        httpOnly: true,
+      })
+      .send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
+router.get('/logout', (req, res) => {
+  res
+    .cookie('token', '', {
+      httpOnly: true,
+      expires: new Date(0),
+    })
+    .send();
 });
 
 module.exports = router;
