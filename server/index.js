@@ -27,11 +27,11 @@ mongoose.connect(
   }
 );
 
-// Make app 'use' the middleware 'express.json' for any incoming request to parse json body
+// Parse the JSON bodies of incoming reqs into a req.body
 app.use(express.json());
 
-app.get('/test', (req, res) => {
-  res.send('It works');
+app.get('/', (res, req) => {
+  console.log('Working');
 });
 
 // Establish Routes
