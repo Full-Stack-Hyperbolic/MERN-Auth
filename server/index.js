@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 
 // dotenv for environment vars
 require('dotenv').config();
@@ -29,6 +30,7 @@ mongoose.connect(
 
 // Parse the JSON bodies of incoming reqs into a req.body
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/', (res, req) => {
   console.log('Working');
@@ -36,3 +38,4 @@ app.get('/', (res, req) => {
 
 // Establish Routes
 app.use('/auth', require('./routers/userRouter'));
+app.use('/customer', require('./routers/customerRouter'));
