@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 router.post('/', async (req, res) => {
   try {
     // Destructure the incoming request data
+    console.log(req.body);
     const { email, password, password2 } = req.body;
 
     // 1. INPUT VALIDATION
