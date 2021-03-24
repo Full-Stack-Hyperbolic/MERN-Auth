@@ -32,7 +32,12 @@ mongoose.connect(
 // Parse the JSON bodies of incoming reqs into a req.body
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 
 app.get('/', (res, req) => {
   console.log('Working');

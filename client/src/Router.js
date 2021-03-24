@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Navbar from './components/layout/Navbar';
 
@@ -15,7 +16,7 @@ export default function Router() {
           <Register />
         </Route>
         <Route path='/login'>
-          <div>Login</div>
+          <Login />
         </Route>
         <Route path='/customer'>
           <div>Customer</div>
